@@ -1237,6 +1237,17 @@ html[dir="rtl"] input[type="tel"].wizard-input:not(:placeholder-shown) {
   color: #25D366;
 }
 
+.footer-email-link {
+  color: #A3ACB9;
+  text-decoration: none;
+  transition: color 0.2s;
+  font-family: var(--font-english);
+}
+
+.footer-email-link:hover {
+  color: var(--color-brand);
+}
+
 .footer-bottom {
   border-top: 1px solid var(--color-border-dark);
   padding-top: var(--space-24);

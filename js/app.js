@@ -276,6 +276,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 8. Floating WhatsApp Group Toggle
+  const whatsappToggle = document.getElementById('whatsappToggle');
+  const whatsappGroup = document.getElementById('whatsappGroup');
+  if (whatsappToggle && whatsappGroup) {
+    whatsappToggle.addEventListener('click', () => {
+      whatsappGroup.classList.toggle('open');
+    });
+  }
+
+  // 9. Footer Social Media Links Toast
+  document.querySelectorAll('.social-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const network = link.getAttribute('data-network') || '';
+      showToast(currentLang === 'ar' ? `قريباً — سيتم تفعيل حساب ${network} الرسمي` : `Coming Soon — Official ${network} Channel`);
+    });
+  });
+
   // Initialize
   applyLanguage(currentLang);
   updateWizardUI();

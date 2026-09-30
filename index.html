@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   
+  <!-- Security Headers & Policies -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+  
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/images/logo.png">
   <link rel="apple-touch-icon" href="assets/images/logo.png">
@@ -32,8 +36,8 @@
   <meta property="twitter:description" content="حلول شاشات LED الرقمية المتكاملة للمشاريع والواجهات في السعودية.">
   <meta property="twitter:image" content="assets/images/hero_display.jpg">
 
-  <!-- Icons: Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Icons: Font Awesome (Secured with SRI) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
   
   <!-- Master Design System Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -865,9 +869,9 @@
             شركة الشاشة الماسية — شريكك الهندسي المعتمد لتصميم وتوريد وتركيب وصيانة حلول شاشات العرض LED المتقدمة بالمملكة العربية السعودية.
           </p>
           <div style="display: flex; gap: 12px;">
-            <a href="#" class="lang-btn" aria-label="LinkedIn" onclick="event.preventDefault(); alert('لينكد إن: [رابط لينكد إن]');"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#" class="lang-btn" aria-label="Twitter / X" onclick="event.preventDefault(); alert('إكس: [رابط تويتر / X]');"><i class="fab fa-x-twitter"></i></a>
-            <a href="#" class="lang-btn" aria-label="Instagram" onclick="event.preventDefault(); alert('إنستغرام: [رابط إنستغرام]');"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="lang-btn social-link" aria-label="LinkedIn" data-network="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="lang-btn social-link" aria-label="Twitter / X" data-network="X"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="lang-btn social-link" aria-label="Instagram" data-network="Instagram"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
 
@@ -906,15 +910,15 @@
           </div>
           <div class="footer-contact-item">
             <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-            <a href="https://wa.me/966502368423?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B4%D8%A7%D8%B4%D8%A7%D8%AA%20LED" target="_blank" class="footer-contact-link" dir="ltr"><bdi>+966 50 236 8423</bdi></a>
+            <a href="https://wa.me/966502368423?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B4%D8%A7%D8%B4%D8%A7%D8%AA%20LED" target="_blank" rel="noopener noreferrer" class="footer-contact-link" dir="ltr"><bdi>+966 50 236 8423</bdi></a>
           </div>
           <div class="footer-contact-item">
             <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-            <a href="https://wa.me/966546779952?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B4%D8%A7%D8%B4%D8%A7%D8%AA%20LED" target="_blank" class="footer-contact-link" dir="ltr"><bdi>+966 54 677 9952</bdi></a>
+            <a href="https://wa.me/966546779952?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B4%D8%A7%D8%B4%D8%A7%D8%AA%20LED" target="_blank" rel="noopener noreferrer" class="footer-contact-link" dir="ltr"><bdi>+966 54 677 9952</bdi></a>
           </div>
           <div class="footer-contact-item">
             <i class="fas fa-envelope"></i>
-            <a href="mailto:info@diamondscreen.sa" style="color: #A3ACB9; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-brand)'" onmouseout="this.style.color='#A3ACB9'">info@diamondscreen.sa</a>
+            <a href="mailto:info@diamondscreen.sa" class="footer-email-link">info@diamondscreen.sa</a>
           </div>
         </div>
       </div>
@@ -988,7 +992,7 @@
         <span><bdi dir="ltr">+966 54 677 9952</bdi></span>
       </a>
     </div>
-    <button class="float-whatsapp-btn" id="whatsappToggle" aria-label="WhatsApp" onclick="document.getElementById('whatsappGroup').classList.toggle('open')">
+    <button class="float-whatsapp-btn" id="whatsappToggle" aria-label="WhatsApp">
       <i class="fab fa-whatsapp"></i>
     </button>
     <button class="float-top-btn" id="backToTopBtn" aria-label="Back to top">
