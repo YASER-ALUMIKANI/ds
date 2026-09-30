@@ -1153,6 +1153,18 @@ html[dir="ltr"] .product-tag {
   box-shadow: 0 0 12px rgba(255, 140, 43, 0.25);
 }
 
+input[type="tel"].wizard-input {
+  direction: ltr;
+  text-align: right;
+  font-family: var(--font-english);
+}
+
+html[dir="rtl"] input[type="tel"].wizard-input:focus,
+html[dir="rtl"] input[type="tel"].wizard-input:not(:placeholder-shown) {
+  text-align: left;
+  direction: ltr;
+}
+
 .wizard-controls {
   display: flex;
   justify-content: space-between;
@@ -1197,7 +1209,7 @@ html[dir="ltr"] .product-tag {
 
 .footer-contact-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-12);
   margin-bottom: var(--space-12);
   font-size: 0.9rem;
@@ -1205,7 +1217,24 @@ html[dir="ltr"] .product-tag {
 
 .footer-contact-item i {
   color: var(--color-brand);
-  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.footer-contact-link {
+  color: #A3ACB9;
+  text-decoration: none;
+  transition: color 0.2s;
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-english);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.footer-contact-link:hover {
+  color: #25D366;
 }
 
 .footer-bottom {
@@ -1819,6 +1848,8 @@ html[dir="ltr"] .floating-widget-container {
 
 .contact-wa-info {
   flex: 1;
+  min-width: 0;
+  text-align: start;
 }
 
 .contact-wa-label {
@@ -1831,11 +1862,26 @@ html[dir="ltr"] .floating-widget-container {
 }
 
 .contact-wa-num {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #FFFFFF;
   font-family: var(--font-english);
   direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+html[dir="rtl"] .contact-wa-num {
+  text-align: right;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+html[dir="ltr"] .contact-wa-num {
+  text-align: left;
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .contact-wa-arrow {
@@ -1952,6 +1998,14 @@ html[dir="ltr"] .floating-widget-container {
   box-shadow: 0 4px 16px rgba(0,0,0,0.35);
   transition: background 0.2s ease, transform 0.2s ease;
   white-space: nowrap;
+  direction: ltr !important;
+  unicode-bidi: isolate;
+}
+
+.float-wa-number-btn span {
+  direction: ltr !important;
+  unicode-bidi: isolate;
+  display: inline-block;
 }
 
 .float-wa-number-btn:hover {
