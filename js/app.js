@@ -112,11 +112,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Global wizard navigation handlers
+  window.dsWizardNext = function() {
+    if (currentWizardStep < 4) {
+      currentWizardStep++;
+      updateWizardUI();
+    }
+  };
+
+  window.dsWizardPrev = function() {
+    if (currentWizardStep > 1) {
+      currentWizardStep--;
+      updateWizardUI();
+    }
+  };
+
+  window.dsWizardGoTo = function(step) {
+    const s = parseInt(step, 10);
+    if (s >= 1 && s <= 4) {
+      currentWizardStep = s;
+      updateWizardUI();
+    }
+  };
+
+  // Direct Step Badges Navigation
+  wizardBadges.forEach(badge => {
+    badge.addEventListener('click', () => {
+      const step = parseInt(badge.getAttribute('data-step'), 10);
+      window.dsWizardGoTo(step);
+    });
+  });
+
   // Wizard Option Cards Selection (Step 1 & Step 3)
   document.querySelectorAll('.wizard-option-card').forEach(card => {
     card.addEventListener('click', () => {
       const parentGrid = card.closest('.wizard-options-grid');
-      parentGrid.querySelectorAll('.wizard-option-card').forEach(c => c.classList.remove('selected'));
+      if (parentGrid) {
+        parentGrid.querySelectorAll('.wizard-option-card').forEach(c => c.classList.remove('selected'));
+      }
       card.classList.add('selected');
 
       const field = card.getAttribute('data-field');
@@ -127,21 +160,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Step 2 Dimensions inputs
+  const wizWidthInput = document.getElementById('wizWidthInput');
+  const wizHeightInput = document.getElementById('wizHeightInput');
+  if (wizWidthInput) {
+    wizWidthInput.addEventListener('input', (e) => {
+      wizardData.width = parseFloat(e.target.value) || 0;
+    });
+  }
+  if (wizHeightInput) {
+    wizHeightInput.addEventListener('input', (e) => {
+      wizardData.height = parseFloat(e.target.value) || 0;
+    });
+  }
+
   if (wizardNextBtn) {
-    wizardNextBtn.addEventListener('click', () => {
-      if (currentWizardStep < 4) {
-        currentWizardStep++;
-        updateWizardUI();
-      }
+    wizardNextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dsWizardNext();
     });
   }
 
   if (wizardPrevBtn) {
-    wizardPrevBtn.addEventListener('click', () => {
-      if (currentWizardStep > 1) {
-        currentWizardStep--;
-        updateWizardUI();
-      }
+    wizardPrevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dsWizardPrev();
     });
   }
 
