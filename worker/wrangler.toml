@@ -1,0 +1,38 @@
+name = "diamond-screen-quotes-local"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+send_metrics = false
+
+[vars]
+ALLOWED_ORIGINS = "http://127.0.0.1:8000,http://localhost:8000"
+EMAIL_MODE = "log"
+EMAIL_FROM = "Diamond Screen Leads <leads@diamondscreen.com.sa>"
+EMAIL_TO = "info@diamondscreen.sa"
+
+[triggers]
+crons = ["*/10 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "diamond-screen-quotes"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[env.production]
+name = "diamond-screen-quotes"
+
+[env.production.vars]
+ALLOWED_ORIGINS = "https://www.diamondscreen.com.sa"
+EMAIL_MODE = "send"
+EMAIL_FROM = "Diamond Screen Leads <leads@diamondscreen.com.sa>"
+EMAIL_TO = "info@diamondscreen.sa"
+
+[env.production.triggers]
+crons = ["*/10 * * * *"]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "diamond-screen-quotes"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
+

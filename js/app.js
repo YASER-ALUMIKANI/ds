@@ -14,27 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const backToTopBtn = document.getElementById('backToTopBtn');
   const toastBox = document.getElementById('toastBox');
   const toastMsg = document.getElementById('toastMsg');
+  const toastIcon = document.getElementById('toastIcon');
 
   // Modal Elements
   const quoteModal = document.getElementById('quoteModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const modalSelectedProduct = document.getElementById('modalSelectedProduct');
   const rfqForms = document.querySelectorAll('.rfq-form-element');
+  let lastModalTrigger = null;
+  let toastTimer = null;
 
   // Wizard State & Elements
   let currentWizardStep = 1;
-  const wizardData = {
-    screenType: 'indoor',
-    width: 4,
-    height: 2.5,
-    location: 'facade',
-    name: '',
-    company: '',
-    phone: '',
-    email: '',
-    notes: ''
-  };
-
+  const wizardForm = document.getElementById('quoteWizardForm');
   const wizardPanes = document.querySelectorAll('.wizard-pane');
   const wizardBadges = document.querySelectorAll('.wizard-step-badge');
   const wizardNextBtn = document.getElementById('wizardNextBtn');
@@ -112,9 +104,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function validateWizardStep(step = currentWizardStep) {
+    const pane = document.querySelector(`.wizard-pane[data-step="${step}"]`);
+    const invalidControl = pane && [...pane.querySelectorAll('input, textarea, select')]
+      .find(control => !control.checkValidity());
+    if (!invalidControl) return true;
+    currentWizardStep = step;
+    updateWizardUI();
+    invalidControl.reportValidity();
+    return false;
+  }
+
+  function validateWizardThrough(targetStep) {
+    for (let step = 1; step < targetStep; step++) {
+      if (!validateWizardStep(step)) return false;
+    }
+    return true;
+  }
+
   // Global wizard navigation handlers
   window.dsWizardNext = function() {
-    if (currentWizardStep < 4) {
+    if (currentWizardStep < 4 && validateWizardStep()) {
       currentWizardStep++;
       updateWizardUI();
     }
@@ -130,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.dsWizardGoTo = function(step) {
     const s = parseInt(step, 10);
     if (s >= 1 && s <= 4) {
+      if (s > currentWizardStep && !validateWizardThrough(s)) return;
       currentWizardStep = s;
       updateWizardUI();
     }
@@ -142,37 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.dsWizardGoTo(step);
     });
   });
-
-  // Wizard Option Cards Selection (Step 1 & Step 3)
-  document.querySelectorAll('.wizard-option-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const parentGrid = card.closest('.wizard-options-grid');
-      if (parentGrid) {
-        parentGrid.querySelectorAll('.wizard-option-card').forEach(c => c.classList.remove('selected'));
-      }
-      card.classList.add('selected');
-
-      const field = card.getAttribute('data-field');
-      const value = card.getAttribute('data-value');
-      if (field && value) {
-        wizardData[field] = value;
-      }
-    });
-  });
-
-  // Step 2 Dimensions inputs
-  const wizWidthInput = document.getElementById('wizWidthInput');
-  const wizHeightInput = document.getElementById('wizHeightInput');
-  if (wizWidthInput) {
-    wizWidthInput.addEventListener('input', (e) => {
-      wizardData.width = parseFloat(e.target.value) || 0;
-    });
-  }
-  if (wizHeightInput) {
-    wizHeightInput.addEventListener('input', (e) => {
-      wizardData.height = parseFloat(e.target.value) || 0;
-    });
-  }
 
   if (wizardNextBtn) {
     wizardNextBtn.addEventListener('click', (e) => {
@@ -188,32 +168,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const wizardForm = document.getElementById('quoteWizardForm');
-  if (wizardForm) {
-    wizardForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const dict = translations[currentLang] || translations.ar;
-      showToast(dict.wiz_success_msg);
-      wizardForm.reset();
-      currentWizardStep = 1;
-      updateWizardUI();
-    });
-  }
-
   // 3. Modal Quote Trigger & Handling
-  function openQuoteModal(productName = '') {
+  function openQuoteModal(productName = '', trigger = null) {
     if (!quoteModal) return;
+    lastModalTrigger = trigger;
     if (modalSelectedProduct) {
       modalSelectedProduct.value = productName || (currentLang === 'ar' ? 'حل شاشة LED متكامل' : 'Custom LED Solution');
     }
+    quoteModal.inert = false;
+    quoteModal.setAttribute('aria-hidden', 'false');
     quoteModal.classList.add('open');
     document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => quoteModal.querySelector('input:not([type="hidden"]):not([readonly]), textarea')?.focus());
   }
 
   function closeQuoteModal() {
-    if (!quoteModal) return;
+    if (!quoteModal || !quoteModal.classList.contains('open')) return;
     quoteModal.classList.remove('open');
+    quoteModal.setAttribute('aria-hidden', 'true');
+    quoteModal.inert = true;
     document.body.style.overflow = '';
+    lastModalTrigger?.focus();
+    lastModalTrigger = null;
   }
 
   if (closeModalBtn) closeModalBtn.addEventListener('click', closeQuoteModal);
@@ -231,27 +207,97 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const productTitle = btn.getAttribute('data-product-title');
-      openQuoteModal(productTitle);
+      openQuoteModal(productTitle, btn);
     });
   });
 
   // 4. Toast Notifications
-  function showToast(message) {
+  function showToast(message, type = 'success') {
     if (!toastBox || !toastMsg) return;
+    clearTimeout(toastTimer);
     toastMsg.textContent = message;
+    toastBox.classList.toggle('error', type === 'error');
+    if (toastIcon) {
+      toastIcon.className = type === 'error' ? 'fas fa-triangle-exclamation' : 'fas fa-circle-check';
+    }
     toastBox.classList.add('show');
-    setTimeout(() => {
+    toastTimer = setTimeout(() => {
       toastBox.classList.remove('show');
     }, 4500);
   }
 
+  function quoteApiUrl() {
+    if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+      return 'http://127.0.0.1:8787/api/quote';
+    }
+    return document.querySelector('meta[name="quote-api-url"]')?.content || '';
+  }
+
+  function quotePayload(form) {
+    const payload = Object.fromEntries(new FormData(form).entries());
+    payload.language = currentLang;
+    payload.sourceUrl = window.location.href;
+    if (payload.width !== undefined) payload.width = Number(payload.width);
+    if (payload.height !== undefined) payload.height = Number(payload.height);
+    return payload;
+  }
+
   rfqForms.forEach(form => {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const dict = translations[currentLang] || translations.ar;
-      showToast(dict.wiz_success_msg || dict.form_success_msg);
-      form.reset();
-      closeQuoteModal();
+      if (form === wizardForm && !validateWizardThrough(5)) return;
+      if (!form.reportValidity()) return;
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      const submitLabel = submitButton?.querySelector('span');
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 12000);
+      form.dataset.submissionId ||= crypto.randomUUID();
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
+      }
+      if (submitLabel) submitLabel.textContent = dict.form_sending;
+
+      try {
+        const response = await fetch(quoteApiUrl(), {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': form.dataset.submissionId
+          },
+          body: JSON.stringify(quotePayload(form))
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) throw new Error(result.code || `http_${response.status}`);
+
+        const reference = result.reference ? ` ${dict.form_reference}: ${result.reference}` : '';
+        showToast(`${dict.wiz_success_msg}${reference}`);
+        form.reset();
+        delete form.dataset.submissionId;
+        if (form === wizardForm) {
+          currentWizardStep = 1;
+          updateWizardUI();
+        } else {
+          closeQuoteModal();
+        }
+      } catch (error) {
+        console.error('quote_submission_failed', error.name || 'Error');
+        showToast(dict.form_error, 'error');
+      } finally {
+        clearTimeout(timeout);
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.removeAttribute('aria-busy');
+        }
+        if (submitLabel) {
+          const latestDict = translations[currentLang] || translations.ar;
+          submitLabel.textContent = latestDict.btn_submit_quote;
+        }
+      }
     });
   });
 

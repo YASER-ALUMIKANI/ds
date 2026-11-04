@@ -1,0 +1,4 @@
+# Production secrets are configured with `wrangler secret put --env production`.
+RESEND_API_KEY=re_replace_me
+IP_HASH_SALT=replace_with_a_long_random_value
+

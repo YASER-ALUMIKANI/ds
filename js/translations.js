@@ -169,6 +169,9 @@ const translations = {
     btn_next: "التالي",
     btn_prev: "السابق",
     btn_submit_quote: "إرسال طلب عرض السعر",
+    form_sending: "جارٍ إرسال الطلب...",
+    form_error: "تعذر إرسال الطلب حالياً. لم نفقد البيانات المدخلة، يرجى المحاولة مرة أخرى.",
+    form_reference: "رقم الطلب",
     wiz_success_msg: "تم استلام طلبك بنجاح! سيقوم مهندس المبيعات بالتواصل معك فوراً.",
 
     // Footer (Section 40)
@@ -351,6 +354,9 @@ const translations = {
     btn_next: "Next",
     btn_prev: "Previous",
     btn_submit_quote: "Submit RFQ Proposal",
+    form_sending: "Sending request...",
+    form_error: "We could not send your request. Your entries are still here; please try again.",
+    form_reference: "Reference",
     wiz_success_msg: "Your request has been received! A sales engineer will contact you promptly.",
 
     // Footer (Section 40)
