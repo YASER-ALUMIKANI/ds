@@ -197,6 +197,27 @@
         </div>
 
         <div class="projects-grid">
+          <!-- Real Project: Al Haraja Municipality -->
+          <article class="project-item-card" id="project-alharaga">
+            <div class="project-media">
+              <img src="assets/projects/alharaga/photo-d98b0985-900.webp" srcset="assets/projects/alharaga/photo-d98b0985-400.webp 400w, assets/projects/alharaga/photo-d98b0985-900.webp 900w" sizes="(max-width: 768px) 100vw, 400px" width="3468" height="4624" alt="شاشة LED إعلانية خارجية على عمود - بلدية الحرجة" class="project-img project-img-top" loading="lazy">
+            </div>
+            <div class="project-info-body">
+              <h3 class="heading-3" style="color: #FFFFFF; margin-bottom: 8px;" data-i18n="proj_4_title">شاشات LED إعلانية خارجية - بلدية الحرجة</h3>
+              <p class="body-small" style="color: var(--color-text-muted); margin-bottom: 16px;" data-i18n="proj_4_desc">تركيب وتشغيل شاشات LED خارجية على أعمدة بجانب الطريق لصالح بلدية الحرجة.</p>
+
+              <div class="project-meta-row">
+                <span><span data-i18n="proj_client_label">العميل:</span> <strong data-i18n="proj_4_client">بلدية الحرجة</strong></span>
+                <span><span data-i18n="proj_type_label">النوع:</span> <strong data-i18n="proj_4_type">شاشات خارجية على أعمدة</strong></span>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-sm" data-gallery-open="alharaga">
+                <i class="fas fa-images" aria-hidden="true"></i>
+                <span data-i18n="proj_gallery_btn">عرض صور المشروع</span>
+                <span dir="ltr">(12)</span>
+              </button>
+            </div>
+          </article>
           <!-- Project 1 -->
           <article class="project-item-card">
             <div class="project-media">
@@ -1011,6 +1032,20 @@
     </button>
   </div>
 
+  <!-- Project Gallery Lightbox -->
+  <div class="modal-backdrop gallery-backdrop" id="galleryModal" role="dialog" aria-modal="true" aria-labelledby="galleryTitle" aria-hidden="true" inert>
+    <div class="gallery-box">
+      <button type="button" class="modal-close-btn" id="galleryCloseBtn" data-i18n-aria-label="gallery_close" aria-label="إغلاق"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h3 class="heading-3 gallery-title" id="galleryTitle"></h3>
+      <div class="gallery-stage">
+        <button type="button" class="gallery-nav gallery-nav-next" id="galleryNext" data-i18n-aria-label="gallery_next" aria-label="التالية"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        <img id="galleryImage" class="gallery-image" alt="">
+        <button type="button" class="gallery-nav gallery-nav-prev" id="galleryPrev" data-i18n-aria-label="gallery_prev" aria-label="السابقة"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+      </div>
+      <p class="gallery-counter" id="galleryCounter" aria-live="polite"></p>
+      <div class="gallery-thumbs" id="galleryThumbs"></div>
+    </div>
+  </div>
   <!-- Toast Notification System -->
   <div class="toast-box" id="toastBox" role="status" aria-live="polite" aria-atomic="true">
     <i class="fas fa-circle-check" id="toastIcon"></i>

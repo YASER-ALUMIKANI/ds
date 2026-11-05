@@ -66,6 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
         el.setAttribute('placeholder', dict[key]);
       }
     });
+
+    // Translate aria-label attributes
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+      const key = el.getAttribute('data-i18n-aria-label');
+      if (dict[key]) {
+        el.setAttribute('aria-label', dict[key]);
+      }
+    });
+
+    refreshGalleryText();
   }
 
   // 2. Quote Wizard Navigation (Section 25 in Design Doc)
@@ -300,6 +310,165 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // 4b. Project Photo Gallery (lightbox)
+  const galleryModal = document.getElementById('galleryModal');
+  const galleryTitle = document.getElementById('galleryTitle');
+  const galleryImage = document.getElementById('galleryImage');
+  const galleryCounter = document.getElementById('galleryCounter');
+  const galleryThumbs = document.getElementById('galleryThumbs');
+  const galleryCloseBtn = document.getElementById('galleryCloseBtn');
+  const galleryPrevBtn = document.getElementById('galleryPrev');
+  const galleryNextBtn = document.getElementById('galleryNext');
+  const gallery = { slug: null, index: 0, trigger: null, titleSource: null };
+  let galleryManifest = null;
+
+  function fillTemplate(template, values) {
+    return String(template || '').replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
+  }
+
+  async function loadGalleryManifest() {
+    if (!galleryManifest) {
+      const response = await fetch('data/gallery-manifest.json');
+      if (!response.ok) throw new Error(`http_${response.status}`);
+      galleryManifest = await response.json();
+    }
+    return galleryManifest;
+  }
+
+  function galleryItems() {
+    return galleryManifest?.[gallery.slug]?.images || [];
+  }
+
+  function galleryPhotoUrl(name, width) {
+    return `assets/projects/${gallery.slug}/${name}-${width}.webp`;
+  }
+
+  function galleryPhotoAlt(number) {
+    const dict = translations[currentLang] || translations.ar;
+    return fillTemplate(dict.gallery_photo_alt, { title: gallery.titleSource?.textContent.trim() || '', n: number });
+  }
+
+  function showGalleryPhoto(index) {
+    const items = galleryItems();
+    if (!items.length) return;
+    const dict = translations[currentLang] || translations.ar;
+    gallery.index = (index + items.length) % items.length;
+    const item = items[gallery.index];
+
+    galleryImage.src = galleryPhotoUrl(item.name, 900);
+    galleryImage.srcset = `${galleryPhotoUrl(item.name, 900)} 900w, ${galleryPhotoUrl(item.name, 1800)} 1800w`;
+    galleryImage.sizes = '(max-width: 900px) 100vw, 900px';
+    galleryImage.width = item.width;
+    galleryImage.height = item.height;
+    galleryImage.alt = galleryPhotoAlt(gallery.index + 1);
+    galleryCounter.textContent = fillTemplate(dict.gallery_counter, { n: gallery.index + 1, total: items.length });
+
+    [...galleryThumbs.children].forEach((thumb, thumbIndex) => {
+      const active = thumbIndex === gallery.index;
+      thumb.classList.toggle('active', active);
+      if (active) {
+        thumb.setAttribute('aria-current', 'true');
+        thumb.scrollIntoView({ block: 'nearest', inline: 'center' });
+      } else {
+        thumb.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function buildGalleryThumbs() {
+    galleryThumbs.replaceChildren();
+    galleryItems().forEach((item, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'gallery-thumb';
+      const thumb = document.createElement('img');
+      thumb.src = galleryPhotoUrl(item.name, 400);
+      thumb.alt = '';
+      thumb.loading = 'lazy';
+      thumb.decoding = 'async';
+      button.append(thumb);
+      button.addEventListener('click', () => showGalleryPhoto(index));
+      galleryThumbs.append(button);
+    });
+  }
+
+  function refreshGalleryText() {
+    if (!galleryModal || !gallery.slug) return;
+    galleryTitle.textContent = gallery.titleSource?.textContent.trim() || '';
+    [...galleryThumbs.children].forEach((thumb, index) => {
+      thumb.setAttribute('aria-label', galleryPhotoAlt(index + 1));
+    });
+    showGalleryPhoto(gallery.index);
+  }
+
+  async function openGallery(slug, trigger) {
+    if (!galleryModal || !/^[a-z0-9-]+$/.test(slug || '')) return;
+    const dict = translations[currentLang] || translations.ar;
+    try {
+      await loadGalleryManifest();
+    } catch (error) {
+      console.error('gallery_load_failed', error.name || 'Error');
+      showToast(dict.gallery_load_error, 'error');
+      return;
+    }
+    if (!Object.prototype.hasOwnProperty.call(galleryManifest, slug)) return;
+
+    gallery.slug = slug;
+    gallery.trigger = trigger;
+    gallery.titleSource = trigger?.closest('article')?.querySelector('h3') || null;
+    buildGalleryThumbs();
+    refreshGalleryText();
+
+    galleryModal.inert = false;
+    galleryModal.setAttribute('aria-hidden', 'false');
+    galleryModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    galleryCloseBtn.focus();
+  }
+
+  function closeGallery() {
+    if (!galleryModal || !galleryModal.classList.contains('open')) return;
+    galleryModal.classList.remove('open');
+    galleryModal.setAttribute('aria-hidden', 'true');
+    galleryModal.inert = true;
+    document.body.style.overflow = '';
+    gallery.trigger?.focus();
+    gallery.slug = null;
+    gallery.trigger = null;
+  }
+
+  if (galleryModal) {
+    document.querySelectorAll('[data-gallery-open]').forEach(btn => {
+      btn.addEventListener('click', () => openGallery(btn.getAttribute('data-gallery-open'), btn));
+    });
+    galleryCloseBtn.addEventListener('click', closeGallery);
+    galleryModal.addEventListener('click', (e) => {
+      if (e.target === galleryModal) closeGallery();
+    });
+    // In RTL the "next" button sits on the left, so the arrow keys are mirrored.
+    galleryNextBtn.addEventListener('click', () => showGalleryPhoto(gallery.index + 1));
+    galleryPrevBtn.addEventListener('click', () => showGalleryPhoto(gallery.index - 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (!galleryModal.classList.contains('open')) return;
+      const rtl = document.documentElement.dir === 'rtl';
+      if (e.key === 'Escape') closeGallery();
+      else if (e.key === 'ArrowRight') showGalleryPhoto(gallery.index + (rtl ? -1 : 1));
+      else if (e.key === 'ArrowLeft') showGalleryPhoto(gallery.index + (rtl ? 1 : -1));
+    });
+
+    let touchStartX = null;
+    galleryImage.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    galleryImage.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const delta = e.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(delta) < 50) return;
+      const rtl = document.documentElement.dir === 'rtl';
+      showGalleryPhoto(gallery.index + ((delta < 0) === rtl ? -1 : 1));
+    }, { passive: true });
+  }
 
   // 5. Sticky Header & Scroll Navigation
   window.addEventListener('scroll', () => {

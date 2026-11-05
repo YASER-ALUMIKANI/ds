@@ -1399,6 +1399,132 @@ html[dir="ltr"] .modal-close-btn {
   border-color: var(--color-brand);
 }
 
+/* Project Photo Gallery (lightbox) */
+.project-img-top {
+  object-position: center 30%;
+}
+
+.gallery-box {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius-large);
+  padding: var(--space-24);
+  width: min(960px, calc(100% - 24px));
+  max-height: 94vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-card-dark);
+  animation: modalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-title {
+  color: #FFFFFF;
+  margin: 0 48px var(--space-16);
+  text-align: center;
+}
+
+.gallery-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border-radius: var(--radius-card);
+  min-height: 200px;
+}
+
+.gallery-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-dark);
+  background: rgba(15, 17, 21, 0.75);
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.gallery-nav:hover,
+.gallery-nav:focus-visible {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  outline: none;
+}
+
+.gallery-nav-next { inset-inline-end: 10px; }
+.gallery-nav-prev { inset-inline-start: 10px; }
+
+/* Chevrons are drawn for LTR; mirror them in RTL. */
+html[dir="rtl"] .gallery-nav i {
+  transform: scaleX(-1);
+}
+
+.gallery-counter {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin: var(--space-12, 12px) 0;
+}
+
+.gallery-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.gallery-thumb {
+  flex: 0 0 auto;
+  width: 84px;
+  height: 64px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: var(--color-bg-tertiary);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: var(--transition-fast);
+}
+
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-thumb:hover,
+.gallery-thumb:focus-visible {
+  opacity: 1;
+  outline: none;
+}
+
+.gallery-thumb.active {
+  opacity: 1;
+  border-color: var(--color-brand);
+}
+
+@media (max-width: 768px) {
+  .gallery-box { padding: var(--space-16); }
+  .gallery-image { max-height: 52vh; }
+  .gallery-thumb { width: 64px; height: 50px; }
+}
 /* Toast Notification */
 .toast-box {
   position: fixed;
