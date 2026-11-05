@@ -69,6 +69,86 @@
                                     }
                                 ]
                  },
+    "borj-aasaah-makkah":  {
+                               "cover":  "img-20240229-wa0007",
+                               "widths":  [
+                                              400,
+                                              900,
+                                              1800
+                                          ],
+                               "images":  [
+                                              {
+                                                  "name":  "img-20240229-wa0007",
+                                                  "width":  3072,
+                                                  "height":  3072
+                                              },
+                                              {
+                                                  "name":  "img-20240227-wa0000",
+                                                  "width":  3072,
+                                                  "height":  3072
+                                              },
+                                              {
+                                                  "name":  "img-20240223-wa0003",
+                                                  "width":  3072,
+                                                  "height":  3072
+                                              },
+                                              {
+                                                  "name":  "img-20240223-wa0000",
+                                                  "width":  3072,
+                                                  "height":  3072
+                                              },
+                                              {
+                                                  "name":  "img-20240218-130447",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              },
+                                              {
+                                                  "name":  "img-20240206-123210",
+                                                  "width":  3072,
+                                                  "height":  3072
+                                              },
+                                              {
+                                                  "name":  "img-20240219-134911",
+                                                  "width":  4896,
+                                                  "height":  4896
+                                              },
+                                              {
+                                                  "name":  "img-20240220-130543",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              },
+                                              {
+                                                  "name":  "img-20240221-132103",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              },
+                                              {
+                                                  "name":  "img-20240221-132118",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              },
+                                              {
+                                                  "name":  "img-20240221-161846",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              },
+                                              {
+                                                  "name":  "img-20240222-113807",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              },
+                                              {
+                                                  "name":  "img-20240223-104927",
+                                                  "width":  3072,
+                                                  "height":  3072
+                                              },
+                                              {
+                                                  "name":  "img-20240223-111825",
+                                                  "width":  2592,
+                                                  "height":  2592
+                                              }
+                                          ]
+                           },
     "fc-aatawen":  {
                        "cover":  "photo-8b504ebf",
                        "widths":  [
