@@ -630,6 +630,109 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Initialize
+  // 11. Projects Horizontal Carousel (Prev/Next arrows + Auto-scroll)
+  const projectsGrid = document.getElementById('projectsGrid');
+  const projectsPrevBtn = document.getElementById('projectsPrevBtn');
+  const projectsNextBtn = document.getElementById('projectsNextBtn');
+
+  if (projectsGrid) {
+    let projectsAutoTimer = null;
+    let projectsPaused = false;
+    let currentProjectIndex = 0;
+
+    function getProjectCards() {
+      return [...projectsGrid.querySelectorAll('.project-item-card')];
+    }
+
+    function syncProjectIndexFromScroll() {
+      const cards = getProjectCards();
+      if (!cards.length) return;
+      const gridRect = projectsGrid.getBoundingClientRect();
+      const rtl = document.documentElement.dir === 'rtl';
+      const anchorX = rtl ? gridRect.right : gridRect.left;
+      let bestIndex = 0;
+      let bestDist = Infinity;
+      cards.forEach((card, idx) => {
+        const rect = card.getBoundingClientRect();
+        const cardEdge = rtl ? rect.right : rect.left;
+        const dist = Math.abs(cardEdge - anchorX);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIndex = idx;
+        }
+      });
+      currentProjectIndex = bestIndex;
+    }
+
+    function scrollToProjectIndex(targetIndex) {
+      const cards = getProjectCards();
+      if (!cards.length) return;
+      currentProjectIndex = ((targetIndex % cards.length) + cards.length) % cards.length;
+      const targetCard = cards[currentProjectIndex];
+      const gridRect = projectsGrid.getBoundingClientRect();
+      const cardRect = targetCard.getBoundingClientRect();
+      const rtl = document.documentElement.dir === 'rtl';
+      const delta = rtl ? (cardRect.right - gridRect.right) : (cardRect.left - gridRect.left);
+
+      // If advancing forward and already at the maximum scrollable end, wrap around to card 0
+      const maxScroll = Math.max(0, projectsGrid.scrollWidth - projectsGrid.clientWidth);
+      const currentScroll = Math.abs(projectsGrid.scrollLeft);
+      if (targetIndex > 0 && currentProjectIndex !== 0 && maxScroll > 0 && currentScroll >= maxScroll - 8 && Math.abs(delta) > 8) {
+        currentProjectIndex = 0;
+        projectsGrid.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
+      }
+
+      projectsGrid.scrollBy({ left: delta, behavior: 'smooth' });
+    }
+
+    function stepProjects(step) {
+      syncProjectIndexFromScroll();
+      const cards = getProjectCards();
+      if (!cards.length) return;
+      const maxScroll = Math.max(0, projectsGrid.scrollWidth - projectsGrid.clientWidth);
+      const currentScroll = Math.abs(projectsGrid.scrollLeft);
+      if (step > 0 && maxScroll > 0 && currentScroll >= maxScroll - 8) {
+        currentProjectIndex = 0;
+        projectsGrid.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
+      }
+      scrollToProjectIndex(currentProjectIndex + step);
+    }
+
+    function startProjectsAutoScroll() {
+      clearInterval(projectsAutoTimer);
+      projectsAutoTimer = setInterval(() => {
+        if (projectsPaused || document.hidden) return;
+        if (galleryModal && galleryModal.classList.contains('open')) return;
+        if (quoteModal && quoteModal.classList.contains('open')) return;
+        stepProjects(1);
+      }, 4000);
+    }
+
+    projectsPrevBtn?.addEventListener('click', () => {
+      stepProjects(-1);
+      startProjectsAutoScroll();
+    });
+
+    projectsNextBtn?.addEventListener('click', () => {
+      stepProjects(1);
+      startProjectsAutoScroll();
+    });
+
+    const carouselWrapper = projectsGrid.closest('.projects-carousel-wrapper') || projectsGrid;
+    carouselWrapper.addEventListener('mouseenter', () => { projectsPaused = true; });
+    carouselWrapper.addEventListener('mouseleave', () => { projectsPaused = false; });
+    carouselWrapper.addEventListener('focusin', () => { projectsPaused = true; });
+    carouselWrapper.addEventListener('focusout', () => { projectsPaused = false; });
+    carouselWrapper.addEventListener('touchstart', () => { projectsPaused = true; }, { passive: true });
+    carouselWrapper.addEventListener('touchend', () => {
+      setTimeout(() => { projectsPaused = false; }, 2500);
+    }, { passive: true });
+
+    startProjectsAutoScroll();
+  }
+
   applyLanguage(currentLang);
   updateWizardUI();
   initVisitorCounter();

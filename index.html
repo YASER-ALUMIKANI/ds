@@ -200,7 +200,11 @@
           </p>
         </div>
 
-        <div class="projects-grid">
+        <div class="projects-carousel-wrapper">
+          <button type="button" class="projects-carousel-arrow projects-carousel-prev" id="projectsPrevBtn" data-i18n-aria-label="proj_scroll_prev" aria-label="المشروع السابق">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <div class="projects-grid" id="projectsGrid">
           <!-- Real Project: Makkah Clock Tower (Borj Al-Saah) -->
           <article class="project-item-card" id="project-borj-aasaah-makkah">
             <div class="project-media">
@@ -288,6 +292,10 @@
               </button>
             </div>
           </article>
+          </div>
+          <button type="button" class="projects-carousel-arrow projects-carousel-next" id="projectsNextBtn" data-i18n-aria-label="proj_scroll_next" aria-label="المشروع التالي">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
     </section>
@@ -1061,7 +1069,7 @@
   </div>
 
   <!-- Scripts (Versioned for Instant Cache Invalidation) -->
-  <script src="js/translations.js?v=2.8"></script>
-  <script src="js/app.js?v=2.8"></script>
+  <script src="js/translations.js?v=2.9"></script>
+  <script src="js/app.js?v=2.9"></script>
 </body>
 </html>

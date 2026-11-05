@@ -843,6 +843,65 @@ html[dir="ltr"] .product-tag {
 }
 
 /* 11. Featured Projects (Dark Section, Butterfly LED Philosophy) */
+.projects-carousel-wrapper {
+  position: relative;
+}
+
+.projects-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 140, 43, 0.55);
+  background: rgba(15, 17, 21, 0.88);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: var(--transition-fast);
+}
+
+.projects-carousel-arrow:hover,
+.projects-carousel-arrow:focus-visible {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #FFFFFF;
+  transform: translateY(-50%) scale(1.06);
+  outline: none;
+}
+
+.projects-carousel-next {
+  inset-inline-end: -18px;
+}
+
+.projects-carousel-prev {
+  inset-inline-start: -18px;
+}
+
+html[dir="rtl"] .projects-carousel-arrow i {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 768px) {
+  .projects-carousel-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+  .projects-carousel-next {
+    inset-inline-end: 6px;
+  }
+  .projects-carousel-prev {
+    inset-inline-start: 6px;
+  }
+}
 .projects-grid {
   display: flex;
   flex-wrap: nowrap;
