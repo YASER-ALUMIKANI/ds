@@ -663,8 +663,8 @@ html[dir="ltr"] .hero-floating-spec {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-32);
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-24);
   text-align: center;
 }
 

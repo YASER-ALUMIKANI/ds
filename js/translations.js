@@ -36,6 +36,7 @@ const translations = {
     stat_cities_lbl: "مدينة ومحافظة",
     stat_exp_num: "+15",
     stat_exp_lbl: "سنة خبرة هندسية",
+    stat_views_lbl: "مشاهدة للصفحة",
 
     // Product Categories (Section 13)
     products_badge: "كتالوج المنتجات",
@@ -233,6 +234,7 @@ const translations = {
     stat_cities_lbl: "Cities Covered",
     stat_exp_num: "15+",
     stat_exp_lbl: "Years Engineering Experience",
+    stat_views_lbl: "Page Views",
 
     // Product Categories (Section 13)
     products_badge: "Product Catalog",

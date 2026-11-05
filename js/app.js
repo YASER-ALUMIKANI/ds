@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     refreshGalleryText();
+    renderVisitorCount(currentVisitorTotal);
   }
 
   // 2. Quote Wizard Navigation (Section 25 in Design Doc)
@@ -320,6 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const galleryCloseBtn = document.getElementById('galleryCloseBtn');
   const galleryPrevBtn = document.getElementById('galleryPrev');
   const galleryNextBtn = document.getElementById('galleryNext');
+  const visitorCountNumber = document.getElementById('visitorCountNumber');
+  let currentVisitorTotal = 100;
   const gallery = { slug: null, index: 0, trigger: null, titleSource: null };
   let galleryManifest = null;
 
@@ -552,7 +555,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // 10. Page Views Counter (Starts at 100, 1 hit per visitor per 30 minutes)
+  const VISITOR_BASE_COUNT = 100;
+  const VISITOR_WINDOW_MS = 30 * 60 * 1000;
+  const VISITOR_HIT_KEY = 'diamond_screen_last_visit_ts';
+  const VISITOR_CACHE_KEY = 'diamond_screen_cached_views';
+  const VISITOR_API_BASE = 'https://abacus.jasoncameron.dev';
+  const VISITOR_NAMESPACE = 'diamondscreen.com.sa';
+  const VISITOR_KEY = 'pageviews';
+
+  function renderVisitorCount(total) {
+    if (!visitorCountNumber) return;
+    const safeTotal = Math.max(VISITOR_BASE_COUNT, Number(total) || VISITOR_BASE_COUNT);
+    currentVisitorTotal = safeTotal;
+    const formatted = safeTotal.toLocaleString('en-US');
+    visitorCountNumber.textContent = (currentLang === 'ar') ? `+${formatted}` : `${formatted}+`;
+  }
+
+  async function initVisitorCounter() {
+    if (!visitorCountNumber) return;
+    let cachedTotal = VISITOR_BASE_COUNT;
+    let shouldIncrement = true;
+
+    try {
+      const savedTotal = Number(localStorage.getItem(VISITOR_CACHE_KEY) || 0);
+      if (savedTotal >= VISITOR_BASE_COUNT) cachedTotal = savedTotal;
+      const lastHit = Number(localStorage.getItem(VISITOR_HIT_KEY) || 0);
+      if (lastHit && (Date.now() - lastHit) < VISITOR_WINDOW_MS) {
+        shouldIncrement = false;
+      }
+    } catch {
+      // Storage blocked (private mode); fall back to read-only or single hit
+    }
+
+    renderVisitorCount(cachedTotal);
+
+    const endpoint = shouldIncrement ? 'hit' : 'get';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    try {
+      const response = await fetch(`${VISITOR_API_BASE}/${endpoint}/${VISITOR_NAMESPACE}/${VISITOR_KEY}`, {
+        method: 'GET',
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!response.ok) throw new Error(`http_${response.status}`);
+      const data = await response.json();
+      const rawValue = Math.max(0, Number(data?.value) || 0);
+      const total = VISITOR_BASE_COUNT + rawValue;
+      renderVisitorCount(total);
+      try {
+        localStorage.setItem(VISITOR_CACHE_KEY, String(total));
+        if (shouldIncrement) {
+          localStorage.setItem(VISITOR_HIT_KEY, String(Date.now()));
+        }
+      } catch {
+        // Ignore storage write errors
+      }
+    } catch {
+      // Fallback: if API is unreachable, increment local cached count once per 30-min window
+      if (shouldIncrement) {
+        const fallbackTotal = cachedTotal + 1;
+        renderVisitorCount(fallbackTotal);
+        try {
+          localStorage.setItem(VISITOR_CACHE_KEY, String(fallbackTotal));
+          localStorage.setItem(VISITOR_HIT_KEY, String(Date.now()));
+        } catch {
+          // Ignore storage write errors
+        }
+      }
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
   // Initialize
   applyLanguage(currentLang);
   updateWizardUI();
+  initVisitorCounter();
 });
