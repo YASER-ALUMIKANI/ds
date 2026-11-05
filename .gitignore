@@ -5,3 +5,4 @@ worker/.dev.vars
 .preview/
 debug.log
 
+source-images/

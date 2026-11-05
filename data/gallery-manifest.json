@@ -1,0 +1,72 @@
+{
+  "alharaga": {
+    "cover": "photo-9ded408f",
+    "widths": [
+      400,
+      900,
+      1800
+    ],
+    "images": [
+      {
+        "name": "photo-9ded408f",
+        "width": 3468,
+        "height": 4624
+      },
+      {
+        "name": "photo-670da765",
+        "width": 3000,
+        "height": 4000
+      },
+      {
+        "name": "photo-7896fc91",
+        "width": 3468,
+        "height": 4624
+      },
+      {
+        "name": "photo-94889279",
+        "width": 3000,
+        "height": 4000
+      },
+      {
+        "name": "photo-0bc868f0",
+        "width": 4624,
+        "height": 3468
+      },
+      {
+        "name": "photo-908fbc09",
+        "width": 3468,
+        "height": 4624
+      },
+      {
+        "name": "photo-67a98fa8",
+        "width": 4624,
+        "height": 3468
+      },
+      {
+        "name": "photo-5a273a44",
+        "width": 3468,
+        "height": 4624
+      },
+      {
+        "name": "photo-d98b0985",
+        "width": 3468,
+        "height": 4624
+      },
+      {
+        "name": "whatsapp-image-2024-07-17-at-12-45-37-pm-1",
+        "width": 899,
+        "height": 1599
+      },
+      {
+        "name": "whatsapp-image-2024-07-17-at-12-45-37-pm",
+        "width": 1536,
+        "height": 1536
+      },
+      {
+        "name": "whatsapp-image-2024-07-17-at-12-45-38-pm-2",
+        "width": 899,
+        "height": 1599
+      }
+    ]
+  }
+}
