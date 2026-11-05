@@ -62,8 +62,8 @@ async function convertImage(sourceFile, projectOut, name) {
   return { name, width: rawWidth, height: rawHeight };
 }
 
-async function processProject(slug) {
-  const projectSource = path.join(SOURCE_DIR, slug);
+async function processProject(folderName, slug) {
+  const projectSource = path.join(SOURCE_DIR, folderName);
   const projectOut = path.join(OUTPUT_DIR, slug);
   await mkdir(projectOut, { recursive: true });
 
@@ -112,22 +112,23 @@ async function main() {
     return;
   }
 
-  const requested = process.argv[2];
+  const requested = process.argv[2] ? slugify(process.argv[2]) : null;
   const folders = (await readdir(SOURCE_DIR, { withFileTypes: true }))
     .filter(entry => entry.isDirectory())
-    .map(entry => entry.name)
-    .filter(name => !requested || name === requested);
+    .map(entry => entry.name);
 
   let manifest = {};
   if (existsSync(MANIFEST_PATH)) manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8'));
 
-  for (const slug of folders) {
-    if (!SLUG_PATTERN.test(slug)) {
-      console.warn(`! "${slug}" is not a valid folder name (use lowercase English letters, digits and dashes). Skipped.`);
+  for (const folderName of folders) {
+    const slug = slugify(folderName);
+    if (!slug || !SLUG_PATTERN.test(slug)) {
+      console.warn(`! "${folderName}" could not be converted to a valid slug. Skipped.`);
       continue;
     }
-    console.log(`Processing ${slug} ...`);
-    const result = await processProject(slug);
+    if (requested && slug !== requested && folderName !== process.argv[2]) continue;
+    console.log(`Processing ${folderName} -> ${slug} ...`);
+    const result = await processProject(folderName, slug);
     if (result) {
       manifest[slug] = result;
       console.log(`  ${result.images.length} images, cover: ${result.cover}`);
