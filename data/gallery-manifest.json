@@ -69,6 +69,91 @@
                                     }
                                 ]
                  },
+    "fc-aatawen":  {
+                       "cover":  "photo-8b504ebf",
+                       "widths":  [
+                                      400,
+                                      900,
+                                      1800
+                                  ],
+                       "images":  [
+                                      {
+                                          "name":  "photo-8b504ebf",
+                                          "width":  3468,
+                                          "height":  4624
+                                      },
+                                      {
+                                          "name":  "photo-67d60dd1",
+                                          "width":  3468,
+                                          "height":  4624
+                                      },
+                                      {
+                                          "name":  "photo-fb24bf50",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-829f7e33",
+                                          "width":  3468,
+                                          "height":  4624
+                                      },
+                                      {
+                                          "name":  "photo-4fc37324",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-e565f134",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-2bac0900",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-4c03d35e",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-2d2bc71e",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-eec89982",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-1996e2a7",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-73ddff5b",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-e8a33044",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-3e26e2eb",
+                                          "width":  4624,
+                                          "height":  3468
+                                      },
+                                      {
+                                          "name":  "photo-06247abf",
+                                          "width":  4624,
+                                          "height":  3468
+                                      }
+                                  ]
+                   },
     "mahmood-saeed-mall":  {
                                "cover":  "img-20220928-121518",
                                "widths":  [
